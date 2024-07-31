@@ -1,0 +1,11 @@
+#these are mysql commands you need to implement before the actual python code 
+#NOTE: RUN THE QUERIES ONE BY ONE 
+
+
+CREATE DATABASE IF NOT EXISTS hotel;
+
+USE hotel; 
+
+CREATE TABLE IF NOT EXISTS staff ( employeeID INT PRIMARY KEY ,  employeeNAME VARCHAR(100) , emp_phone VARCHAR(15) , emp_adhar VARCHAR(20) , DOB DATE NOT NULL );
+
+CREATE TABLE IF NOT EXISTS guest ( roomno INT PRIMARY KEY, name VARCHAR(100),DOB DATE,mobile VARCHAR(15),adhaar VARCHAR(20), nationality VARCHAR(50), status ENUM('available','booked') );
