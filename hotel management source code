@@ -1,0 +1,242 @@
+''' credentials of mysql are need to be change 
+  username for admin is admin and 
+password for admin is admin123
+no password and username for guest log in directly '''
+
+
+#source code
+
+import tkinter as tk
+from tkinter import messagebox, simpledialog
+import mysql.connector as conn
+
+mycon = conn.connect(host="localhost", user="root", passwd="UMANGPAHUJA", database="hotel")
+
+class HotelApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Taj Palace Hotel Management")
+        self.root.geometry("800x600")
+        self.root.configure(bg="#e0f7fa")
+
+        self.login_screen()
+
+    def login_screen(self):
+        self.clear_frame()
+        tk.Label(self.root, text="Welcome to Taj Palace Hotel Management", font=("Arial", 24), bg="#e0f7fa").pack(pady=20)
+        
+        tk.Label(self.root, text="Login as:", font=("Arial", 18), bg="#e0f7fa").pack(pady=10)
+        tk.Button(self.root, text="Admin", font=("Arial", 16), command=self.admin_login).pack(pady=10)
+        tk.Button(self.root, text="Guest", font=("Arial", 16), command=self.guest_login).pack(pady=10)
+
+    def clear_frame(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+    def admin_login(self):
+        self.clear_frame()
+        tk.Label(self.root, text="Admin Login", font=("Arial", 24), bg="#e0f7fa").pack(pady=20)
+        tk.Label(self.root, text="Username:", font=("Arial", 16), bg="#e0f7fa").pack(pady=5)
+        self.username_entry = tk.Entry(self.root, font=("Arial", 16))
+        self.username_entry.pack(pady=5)
+        tk.Label(self.root, text="Password:", font=("Arial", 16), bg="#e0f7fa").pack(pady=5)
+        self.password_entry = tk.Entry(self.root, font=("Arial", 16), show="*")
+        self.password_entry.pack(pady=5)
+        tk.Button(self.root, text="Login", font=("Arial", 16), command=self.check_admin_login).pack(pady=20)
+
+    def check_admin_login(self):
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+        if username == "admin" and password == "admin123":
+            messagebox.showinfo("Login Success", "Welcome Admin")
+            self.admin_dashboard()
+        else:
+            messagebox.showerror("Login Failed", "Invalid username or password")
+
+    def admin_dashboard(self):
+        self.clear_frame()
+        tk.Label(self.root, text="Admin Dashboard", font=("Arial", 24), bg="#e0f7fa").pack(pady=20)
+
+        frame = tk.Frame(self.root, bg="#e0f7fa")
+        frame.pack(pady=20)
+
+        tk.Button(frame, text="Manage Staff", font=("Arial", 18), command=self.manage_staff, width=20).grid(row=0, column=0, padx=20, pady=10)
+        tk.Button(frame, text="Manage Guests", font=("Arial", 18), command=self.manage_guests, width=20).grid(row=0, column=1, padx=20, pady=10)
+
+    def guest_login(self):
+        self.clear_frame()
+        tk.Label(self.root, text="Guest Dashboard", font=("Arial", 24), bg="#e0f7fa").pack(pady=20)
+
+        frame = tk.Frame(self.root, bg="#e0f7fa")
+        frame.pack(pady=20)
+
+        tk.Button(frame, text="Book Room", font=("Arial", 18), command=self.book_room, width=20).grid(row=0, column=0, padx=20, pady=10)
+        tk.Button(frame, text="View Hotel Info", font=("Arial", 18), command=self.view_hotel_info, width=20).grid(row=0, column=1, padx=20, pady=10)
+
+    def manage_staff(self):
+        self.clear_frame()
+        tk.Label(self.root, text="Manage Staff", font=("Arial", 24), bg="#e0f7fa").pack(pady=20)
+        frame = tk.Frame(self.root, bg="#e0f7fa")
+        frame.pack(pady=20)
+
+        tk.Button(frame, text="Add Employee", font=("Arial", 16), command=self.add_employee, width=20).grid(row=0, column=0, padx=20, pady=10)
+        tk.Button(frame, text="Search Employee", font=("Arial", 16), command=self.search_employee, width=20).grid(row=1, column=0, padx=20, pady=10)
+        tk.Button(frame, text="Edit Employee", font=("Arial", 16), command=self.edit_employee, width=20).grid(row=2, column=0, padx=20, pady=10)
+        tk.Button(frame, text="Delete Employee", font=("Arial", 16), command=self.delete_employee, width=20).grid(row=3, column=0, padx=20, pady=10)
+        tk.Button(frame, text="Back to Dashboard", font=("Arial", 16), command=self.admin_dashboard, width=20).grid(row=4, column=0, padx=20, pady=10)
+
+    def manage_guests(self):
+        self.clear_frame()
+        tk.Label(self.root, text="Manage Guests", font=("Arial", 24), bg="#e0f7fa").pack(pady=20)
+        frame = tk.Frame(self.root, bg="#e0f7fa")
+        frame.pack(pady=20)
+
+        tk.Button(frame, text="Insert Guest", font=("Arial", 16), command=self.insert_guest, width=20).grid(row=0, column=0, padx=20, pady=10)
+        tk.Button(frame, text="Search Room", font=("Arial", 16), command=self.search_room, width=20).grid(row=1, column=0, padx=20, pady=10)
+        tk.Button(frame, text="Search Guest", font=("Arial", 16), command=self.search_guest, width=20).grid(row=2, column=0, padx=20, pady=10)
+        tk.Button(frame, text="Delete Guest", font=("Arial", 16), command=self.delete_guest, width=20).grid(row=3, column=0, padx=20, pady=10)
+        tk.Button(frame, text="Back to Dashboard", font=("Arial", 16), command=self.admin_dashboard, width=20).grid(row=4, column=0, padx=20, pady=10)
+
+    def book_room(self):
+        self.clear_frame()
+        tk.Label(self.root, text="Book Room", font=("Arial", 24), bg="#e0f7fa").pack(pady=20)
+        tk.Label(self.root, text="Room Number:", font=("Arial", 16), bg="#e0f7fa").pack(pady=10)
+        self.room_number_entry = tk.Entry(self.root, font=("Arial", 16))
+        self.room_number_entry.pack(pady=10)
+        tk.Button(self.root, text="Book Room", font=("Arial", 16), command=self.book_room_action).pack(pady=20)
+        tk.Button(self.root, text="Back to Dashboard", font=("Arial", 16), command=self.guest_login).pack(pady=10)
+
+    def view_hotel_info(self):
+        messagebox.showinfo("Hotel Information", 
+            "Create memories for a lifetime. Watch your child’s face light up in the golden sunlight as you build your first dream sandcastle together on a Taj Holiday. Let time stand still as you travel across a lake to a 16th century white marble palace. Discover architectural marvels on a Champagne tour, as peacocks strut by your side. Enjoy the romance of living in a rainforest while you walk through the clouds. Feel a cold shiver run down your spine as you hear a tiger roar in the dense forest. Indulge in a wellness treatment, crafted using centuries of traditional knowledge. Set your soul free to embrace the sheer magic of experiencing timeless traditions. Realize cherished moments for a lifetime with every Taj Holiday, crafted with impeccable details just for you and your loved ones.")
+
+    def add_employee(self):
+        employeeID = simpledialog.askinteger("Input", "Enter employee ID:")
+        name = simpledialog.askstring("Input", "Enter employee name:")
+        phone = simpledialog.askstring("Input", "Enter employee phone number:")
+        adhaar = simpledialog.askstring("Input", "Enter employee adhaar number:")
+        dob = simpledialog.askstring("Input", "Enter employee DOB (yyyy-mm-dd):")
+
+        cur = mycon.cursor()
+        cur.execute("INSERT INTO staff (employeeID, employeeNAME, emp_phone, emp_adhar, DOB) VALUES (%s, %s, %s, %s, %s)", 
+                    (employeeID, name, phone, adhaar, dob))
+        mycon.commit()
+        messagebox.showinfo("Success", "Employee added successfully!")
+
+    def search_employee(self):
+        self.search_window = tk.Toplevel(self.root)
+        self.search_window.title("Search Employee")
+
+        tk.Label(self.search_window, text="Search by:").pack()
+        tk.Button(self.search_window, text="By ID", command=self.search_by_id).pack()
+        tk.Button(self.search_window, text="By Phone", command=self.search_by_phone).pack()
+        tk.Button(self.search_window, text="By Adhaar", command=self.search_by_adhaar).pack()
+    def search_by_id(self):
+        employeeID = simpledialog.askinteger("Input", "Enter employee ID:")
+        cur = mycon.cursor()
+        cur.execute("SELECT * FROM staff WHERE employeeID = %s", (employeeID,))
+        data = cur.fetchone()
+        if data:
+            messagebox.showinfo("Employee Details", str(data))
+        else:
+            messagebox.showinfo("Not Found", "No record found.")
+
+    def search_by_phone(self):
+        phone = simpledialog.askstring("Input", "Enter employee phone number:")
+        cur = mycon.cursor()
+        cur.execute("SELECT * FROM staff WHERE emp_phone = %s", (phone,))
+        data = cur.fetchone()
+        if data:
+            messagebox.showinfo("Employee Details", str(data))
+        else:
+            messagebox.showinfo("Not Found", "No record found.")
+
+    def search_by_adhaar(self):
+        adhaar = simpledialog.askstring("Input", "Enter employee adhaar number:")
+        cur = mycon.cursor()
+        cur.execute("SELECT * FROM staff WHERE emp_adhar = %s", (adhaar,))
+        data = cur.fetchone()
+        if data:
+            messagebox.showinfo("Employee Details", str(data))
+        else:
+            messagebox.showinfo("Not Found", "No record found.")
+
+    def edit_employee(self):
+        employeeID = simpledialog.askinteger("Input", "Enter employee ID to edit:")
+        field = simpledialog.askstring("Input", "Enter field to edit (employeeNAME, emp_phone, emp_adhar, DOB):")
+        new_value = simpledialog.askstring("Input", f"Enter new value for {field}:")
+
+        cur = mycon.cursor()
+        cur.execute(f"UPDATE staff SET {field} = %s WHERE employeeID = %s", (new_value, employeeID))
+        mycon.commit()
+        messagebox.showinfo("Success", "Employee details updated successfully!")
+
+    def delete_employee(self):
+        employeeID = simpledialog.askinteger("Input", "Enter employee ID to delete:")
+        cur = mycon.cursor()
+        cur.execute("DELETE FROM staff WHERE employeeID = %s", (employeeID,))
+        mycon.commit()
+        messagebox.showinfo("Success", "Employee deleted successfully!")
+
+    def insert_guest(self):
+        roomno = simpledialog.askinteger("Input", "Enter room number:")
+        name = simpledialog.askstring("Input", "Enter guest name:")
+        dob = simpledialog.askstring("Input", "Enter guest DOB (yyyy-mm-dd):")
+        mobile = simpledialog.askstring("Input", "Enter guest mobile number:")
+        adhaar = simpledialog.askstring("Input", "Enter guest adhaar number:")
+        nationality = simpledialog.askstring("Input", "Enter guest nationality:")
+        status = 'available'
+
+        cur = mycon.cursor()
+        cur.execute("INSERT INTO guest (roomno, name, DOB, mobile, adhaar, nationality, status) VALUES (%s, %s, %s, %s, %s, %s, %s)", 
+                    (roomno, name, dob, mobile, adhaar, nationality, status))
+        mycon.commit()
+        messagebox.showinfo("Success", "Guest added successfully!")
+
+    def search_room(self):
+        roomno = simpledialog.askinteger("Input", "Enter room number to search:")
+        cur = mycon.cursor()
+        cur.execute("SELECT * FROM guest WHERE roomno = %s", (roomno,))
+        data = cur.fetchone()
+        if data:
+            messagebox.showinfo("Room Details", str(data))
+        else:
+            messagebox.showinfo("Not Found", "No record found.")
+
+    def search_guest(self):
+        name = simpledialog.askstring("Input", "Enter guest name:")
+        cur = mycon.cursor()
+        cur.execute("SELECT * FROM guest WHERE name = %s", (name,))
+        data = cur.fetchone()
+        if data:
+            messagebox.showinfo("Guest Details", str(data))
+        else:
+            messagebox.showinfo("Not Found", "No record found.")
+
+    def delete_guest(self):
+        roomno = simpledialog.askinteger("Input", "Enter room number to delete:")
+        cur = mycon.cursor()
+        cur.execute("DELETE FROM guest WHERE roomno = %s", (roomno,))
+        mycon.commit()
+        messagebox.showinfo("Success", "Guest deleted successfully!")
+
+    def book_room_action(self):
+        roomno = self.room_number_entry.get()
+        cur = mycon.cursor()
+        cur.execute("SELECT * FROM guest WHERE roomno = %s", (roomno,))
+        data = cur.fetchone()
+        if data:
+            if data[6] == 'available':
+                cur.execute("UPDATE guest SET status = 'booked' WHERE roomno = %s", (roomno,))
+                mycon.commit()
+                messagebox.showinfo("Success", "Room booked successfully!")
+            else:
+                messagebox.showinfo("Error", "Room is already booked.")
+        else:
+            messagebox.showinfo("Not Found", "Room not found.")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = HotelApp(root)
+    root.mainloop()
+
